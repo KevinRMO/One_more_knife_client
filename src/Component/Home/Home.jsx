@@ -1,7 +1,7 @@
 import "./Home.css";
 import NavBar from "../Navbar/Navbar";
-import PostedAnnonce from "../PostedAnnonce/PostedAnnonce";
-import SearchBar from "../SearchBar/SearchBar";
+// import PostedAnnonce from "../PostedAnnonce/PostedAnnonce";
+// import SearchBar from "../SearchBar/SearchBar";
 
 function Home() {
   return (

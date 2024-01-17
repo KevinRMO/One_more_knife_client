@@ -1,0 +1,3 @@
+#root > div > header > div {
+  max-width: none !important;
+}
