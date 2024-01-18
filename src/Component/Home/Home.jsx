@@ -1,12 +1,16 @@
 import "./Home.css";
 import NavBar from "../Navbar/Navbar";
-// import PostedAnnonce from "../PostedAnnonce/PostedAnnonce";
-// import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "../SearchBar/SearchBar";
+import PostedAnnonce from "../PostedAnnonce/PostedAnnonce";
 
 function Home() {
   return (
     <>
       <NavBar />
+      <div className="parent">
+        <SearchBar />
+        <PostedAnnonce />
+      </div>
     </>
   );
 }

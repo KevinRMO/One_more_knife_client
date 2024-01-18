@@ -1,3 +1,16 @@
 #root > div > header > div {
   max-width: none !important;
 }
+
+.navBar {
+  background-color: #1a2530 !important;
+  width: 100%;
+}
+
+.logo {
+  width: 4em;
+}
+
+/* .containeNavBar {
+  position: relative;
+} */
