@@ -51,6 +51,7 @@ function NavBar() {
             }}
           >
             <img
+              style={{ cursor: "pointer" }}
               className="logo"
               src="/One-more-Knife.png"
               alt="Logo"

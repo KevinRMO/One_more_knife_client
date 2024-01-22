@@ -32,6 +32,9 @@ const PostedAnnonce = () => {
           <CardContent>
             <Typography variant="h4">{job.title}</Typography>
             <Typography variant="h5">{job.location_title}</Typography>
+            <Typography variant="h6" color="text.secondary">
+              {job.location_zip_code}, {job.location_city}
+            </Typography>
             <Typography variant="subtitle1" color="text.secondary">
               Du {job.date_start} au {job.date_end}
             </Typography>
