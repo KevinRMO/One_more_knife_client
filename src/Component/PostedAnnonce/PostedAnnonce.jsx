@@ -30,22 +30,14 @@ const PostedAnnonce = () => {
       {jobs.map((job) => (
         <Card key={job.id} sx={{ minWidth: 275 }}>
           <CardContent>
-            <Typography>
-              <h1>{job.title}</h1>
+            <Typography variant="h4">{job.title}</Typography>
+            <Typography variant="h5">{job.location_title}</Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              Du {job.date_start} au {job.date_end}
             </Typography>
-            <Typography>
-              <h2>{job.location_title}</h2>
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              <h3>
-                Du {job.date_start} au {job.date_end}
-              </h3>
-            </Typography>
-            <Typography>
-              <h3>{job.salary} €</h3>
-            </Typography>
+            <Typography variant="h6">{job.salary} €</Typography>
             <Typography variant="body2">
-              <p>{job.description_job}</p>
+              {job.description_job}
               <br />
             </Typography>
           </CardContent>
