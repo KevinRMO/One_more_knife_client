@@ -1,6 +1,7 @@
 import * as React from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -16,6 +17,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -36,23 +38,15 @@ function Copyright(props) {
 }
 
 const defaultTheme = createTheme();
+// const user = "Candidat";
+// const company = "Entreprise";
 
-function Login() {
+const Login = () => {
   const navigate = useNavigate();
-  const [categorie, setCategorie] = React.useState("");
-
-  const handleChange = (event) => {
-    setCategorie(event.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
   const navigateToHome = () => {
     navigate("/");
@@ -64,6 +58,29 @@ function Login() {
 
   const navigateToRegisterCompany = () => {
     navigate("/Register-company");
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/login",
+        formData
+      );
+      console.log(response.data);
+      localStorage.setItem("token", response.data.token);
+      setTimeout(() => {
+        navigateToHome();
+      }, 1500);
+      // Gérer la réponse de l'API ici (par exemple, rediriger l'utilisateur)
+    } catch (error) {
+      console.error("Erreur lors de la connexion", error);
+      // Gérer les erreurs ici
+    }
   };
 
   return (
@@ -95,21 +112,22 @@ function Login() {
               noValidate
               sx={{ mt: 1 }}
             >
-              <FormControl fullWidth>
+              {/* <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
                   Vous êtes ?
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={categorie}
-                  label=" Vous êtes ?"
+                  value={formData.category}
+                  label="Vous êtes ?"
                   onChange={handleChange}
+                  name="category"
                 >
-                  <MenuItem value={10}>Candidat</MenuItem>
-                  <MenuItem value={20}>Entreprise</MenuItem>
+                  <MenuItem value={user}>Candidat</MenuItem>
+                  <MenuItem value={company}>Entreprise</MenuItem>
                 </Select>
-              </FormControl>
+              </FormControl> */}
               <TextField
                 margin="normal"
                 required
@@ -117,8 +135,10 @@ function Login() {
                 id="email"
                 label="Adresse e-mail"
                 name="email"
+                value={formData.email}
                 autoComplete="email"
                 autoFocus
+                onChange={handleChange}
               />
               <TextField
                 margin="normal"
@@ -128,8 +148,11 @@ function Login() {
                 label="Mot de passe"
                 type="password"
                 id="password"
+                value={formData.password}
                 autoComplete="current-password"
+                onChange={handleChange}
               />
+
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Ce souvenir"
@@ -174,5 +197,5 @@ function Login() {
       </ThemeProvider>
     </div>
   );
-}
+};
 export default Login;

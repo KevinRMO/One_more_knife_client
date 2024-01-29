@@ -64,7 +64,6 @@ function RegisterUser() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     // Vérifier si tous les champs sont remplis
     const formElements = event.currentTarget.elements;
     for (const element of formElements) {
