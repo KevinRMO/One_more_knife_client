@@ -13,10 +13,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Alert from "@mui/material/Alert";
 import axios from "axios";
 
 function Copyright(props) {
@@ -41,6 +38,9 @@ const defaultTheme = createTheme();
 
 const Login = () => {
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const [loginError, setLoginError] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -64,6 +64,11 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Vérifier si tous les champs requis sont remplis
+    if (!formData.email || !formData.password) {
+      setShowMessage(true); // Afficher l'alerte de message si un champ est manquant
+      return;
+    }
     try {
       const response = await axios.post(
         "http://localhost:8000/api/login",
@@ -74,12 +79,13 @@ const Login = () => {
       if (response.data.category === "Entreprise") {
         localStorage.setItem("isCompany", "true");
       }
+      setShowAlert(true);
       setTimeout(() => {
         navigateToHome();
       }, 1500);
       // Gérer la réponse de l'API ici (par exemple, rediriger l'utilisateur)
     } catch (error) {
-      console.error("Erreur lors de la connexion", error);
+      setLoginError(true);
       // Gérer les erreurs ici
     }
   };
@@ -140,7 +146,7 @@ const Login = () => {
 
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
-                label="Ce souvenir"
+                label=" Se souvenir de moi"
               />
               <Button
                 className="buttonConnexion"
@@ -151,6 +157,21 @@ const Login = () => {
               >
                 Connexion
               </Button>
+              {showAlert && (
+                <Alert severity="success">
+                  Vous êtes connecté, redirection vers l'accueil.
+                </Alert>
+              )}
+              {loginError && (
+                <Alert severity="error" onClose={() => setLoginError(false)}>
+                  Adresse e-mail ou mot de passe incorrect.
+                </Alert>
+              )}
+              {showMessage && (
+                <Alert severity="warning">
+                  Veuillez remplir tous les champs.
+                </Alert>
+              )}
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

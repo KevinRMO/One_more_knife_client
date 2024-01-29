@@ -1,13 +1,13 @@
 import * as React from "react";
-import "./ProfilUser.css";
+import "./ApplicationCompany.css";
 import NavBar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 
-function ProfilUser() {
+function ApplicationCompany() {
   return (
     <>
       <NavBar />
     </>
   );
 }
-export default ProfilUser;
+export default ApplicationCompany;

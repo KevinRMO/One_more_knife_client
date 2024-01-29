@@ -47,6 +47,10 @@ function NavBar() {
     navigate("/create-annonce");
   };
 
+  const navigateToCandidature = () => {
+    navigate("/candidature");
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("isCompany");
@@ -113,7 +117,9 @@ function NavBar() {
               }}
             >
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Accueil</Typography>
+                <Typography textAlign="center" onClick={navigateToHome}>
+                  Accueil
+                </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">
@@ -129,7 +135,6 @@ function NavBar() {
               )}
             </Menu>
           </Box>
-
           <Typography
             variant="h5"
             noWrap
@@ -152,8 +157,8 @@ function NavBar() {
 
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
-              onClick={handleCloseNavMenu}
               sx={{ my: 2, color: "white", display: "block" }}
+              onClick={navigateToHome}
             >
               Accueil
             </Button>
@@ -177,6 +182,14 @@ function NavBar() {
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 Créer une annonce
+              </Button>
+            )}
+            {auth && isCompany === "true" && (
+              <Button
+                onClick={navigateToCreateAnnonce}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Candidature
               </Button>
             )}
           </Box>
