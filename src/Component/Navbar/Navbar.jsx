@@ -14,6 +14,9 @@ import MenuItem from "@mui/material/MenuItem";
 
 function NavBar() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  const isCompany = localStorage.getItem("isCompany");
+  const [auth, setAuth] = React.useState(!!token);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -32,6 +35,27 @@ function NavBar() {
     navigate("/login");
   };
 
+  const navigateToProfileCompany = () => {
+    navigate("/profil-company");
+  };
+
+  const navigateToProfileUser = () => {
+    navigate("/profil-user");
+  };
+
+  const navigateToCreateAnnonce = () => {
+    navigate("/create-annonce");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isCompany");
+    setAuth(false);
+    navigateToHome();
+  };
+
+  console.log("auth:", auth);
+  console.log("isCompany:", isCompany);
   return (
     <AppBar className="navBar">
       <Container className="containeNavBar">
@@ -92,10 +116,20 @@ function NavBar() {
                 <Typography textAlign="center">Accueil</Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <Typography textAlign="center">Profil</Typography>
+                <Typography textAlign="center">
+                  {isCompany === "true"
+                    ? "Profil Entreprise"
+                    : "Profil Candidat"}
+                </Typography>
               </MenuItem>
+              {auth && isCompany === "true" && (
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Créer une annonce</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
+
           <Typography
             variant="h5"
             noWrap
@@ -115,6 +149,7 @@ function NavBar() {
               onClick={navigateToHome}
             />
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
               onClick={handleCloseNavMenu}
@@ -122,15 +157,46 @@ function NavBar() {
             >
               Accueil
             </Button>
+            {auth && (
+              <Button
+                onClick={() => {
+                  if (isCompany === "true") {
+                    navigateToProfileCompany();
+                  } else {
+                    navigateToProfileUser();
+                  }
+                }}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {isCompany === "true" ? "Profil Entreprise" : "Profil Candidat"}
+              </Button>
+            )}
+            {auth && isCompany === "true" && (
+              <Button
+                onClick={navigateToCreateAnnonce}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Créer une annonce
+              </Button>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Button
-              sx={{ my: 2, color: "white", display: "block" }}
-              onClick={navigateToLogin}
-            >
-              Connexion
-            </Button>
+            {auth ? (
+              <Button
+                onClick={handleLogout}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Déconnexion
+              </Button>
+            ) : (
+              <Button
+                sx={{ my: 2, color: "white", display: "block" }}
+                onClick={navigateToLogin}
+              >
+                Connexion
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>

@@ -38,8 +38,6 @@ function Copyright(props) {
 }
 
 const defaultTheme = createTheme();
-// const user = "Candidat";
-// const company = "Entreprise";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -73,6 +71,9 @@ const Login = () => {
       );
       console.log(response.data);
       localStorage.setItem("token", response.data.token);
+      if (response.data.category === "Entreprise") {
+        localStorage.setItem("isCompany", "true");
+      }
       setTimeout(() => {
         navigateToHome();
       }, 1500);
@@ -112,22 +113,6 @@ const Login = () => {
               noValidate
               sx={{ mt: 1 }}
             >
-              {/* <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Vous êtes ?
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={formData.category}
-                  label="Vous êtes ?"
-                  onChange={handleChange}
-                  name="category"
-                >
-                  <MenuItem value={user}>Candidat</MenuItem>
-                  <MenuItem value={company}>Entreprise</MenuItem>
-                </Select>
-              </FormControl> */}
               <TextField
                 margin="normal"
                 required
