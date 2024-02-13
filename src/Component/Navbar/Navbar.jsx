@@ -47,8 +47,12 @@ function NavBar() {
     navigate("/create-annonce");
   };
 
-  const navigateToCandidature = () => {
-    navigate("/candidature");
+  const navigateToAppCompany = () => {
+    navigate("/application-company");
+  };
+
+  const navigateToAppUser = () => {
+    navigate("/application-user");
   };
 
   const handleLogout = () => {
@@ -58,8 +62,6 @@ function NavBar() {
     navigateToHome();
   };
 
-  console.log("auth:", auth);
-  console.log("isCompany:", isCompany);
   return (
     <AppBar className="navBar">
       <Container className="containeNavBar">
@@ -184,12 +186,18 @@ function NavBar() {
                 Créer une annonce
               </Button>
             )}
-            {auth && isCompany === "true" && (
+            {auth && (
               <Button
-                onClick={navigateToCreateAnnonce}
+                onClick={() => {
+                  if (isCompany === "true") {
+                    navigateToAppCompany();
+                  } else {
+                    navigateToAppUser();
+                  }
+                }}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                Candidature
+                {isCompany === "true" ? "Candidature" : "Postulation"}
               </Button>
             )}
           </Box>

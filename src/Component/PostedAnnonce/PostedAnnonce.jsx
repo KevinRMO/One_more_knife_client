@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./PostedAnnonce.css";
+import DetailAnnonce from "../DetailAnnonce/DetailAnnonce";
 
 const PostedAnnonce = () => {
   const [jobs, setJobs] = useState([]);
@@ -45,7 +46,9 @@ const PostedAnnonce = () => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">Voir plus</Button>
+            <Button size="small">
+              <DetailAnnonce />
+            </Button>
           </CardActions>
         </Card>
       ))}
