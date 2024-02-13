@@ -55,8 +55,6 @@ function ProfilCompany() {
           },
         }
       );
-
-      console.log(formData);
       if (response.status === 200) {
         console.log("Lieu créé avec succès");
         handleClose(); // Fermer le modal après la création du lieu
