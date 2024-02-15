@@ -13,18 +13,102 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Alert from "@mui/material/Alert";
+import axios from "axios";
 
 function CreateAnnonce() {
+  const navigate = useNavigate();
   const currentDate = new Date()
     .toLocaleDateString("fr-CA")
     .split("/")
     .reverse()
     .join("-");
-
+  const [formData, setFormData] = React.useState({
+    title: "",
+    date_start: "",
+    date_end: "",
+    salary: "",
+    description_job: "",
+  });
   const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
-  //////////////////////////////////////// Affichage des titres des Etablissements ////////////////////////////////////////
+  const navigateToHome = () => {
+    navigate("/");
+  };
+
+  //////////////////////////////////////// Créé une offre d'emploi ////////////////////////////////////////
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Vérifier si tous les champs sont remplis
+    const formElements = event.currentTarget.elements;
+    let allFieldsFilled = true;
+    for (const element of formElements) {
+      if (element.required && element.value.trim() === "") {
+        allFieldsFilled = false;
+        break;
+      }
+    }
+
+    if (!allFieldsFilled) {
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
+
+    // Vérifier si le champ de salaire ne contient que des chiffres
+    if (!/^\d*\.?\d*$/.test(formData.salary)) {
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
+
+    // Vérifier si la date de fin est postérieure à la date de début
+    if (formData.date_end < formData.date_start) {
+      setShowError(true);
+      setTimeout(() => {
+        setShowError(false);
+      }, 3000);
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://localhost:8000/api/jobs",
+        formData,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json", // spécifier le type de contenu JSON
+          },
+        }
+      );
+      if (response.status === 200) {
+        console.log("Emploi créé avec succès");
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          navigateToHome();
+        }, 1500);
+      } else {
+        console.error("Erreur lors de la création du lieu");
+      }
+    } catch (error) {
+      console.error("Erreur", error);
+    }
+  };
+
+  //////////////////////////////////////// Affichage des titres des Etablissements dans le select ////////////////////////////////////////
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,8 +136,23 @@ function CreateAnnonce() {
     fetchData();
   }, []);
 
-  const handleChange = (event) => {
-    setSelectedLocation(event.target.value);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "location_id") {
+      setSelectedLocation(value);
+    }
+
+    if (name === "date_start") {
+      setFormData({
+        ...formData,
+        date_start: value,
+        // Si la date de fin est antérieure à la date de début, la date de fin est réinitialisée
+        date_end: value > formData.date_end ? value : formData.date_end,
+      });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   return (
@@ -75,7 +174,7 @@ function CreateAnnonce() {
           <Box
             component="form"
             noValidate
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -86,6 +185,8 @@ function CreateAnnonce() {
                   id="title"
                   label="Titre de l'emploi"
                   name="title"
+                  value={formData.title}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -97,6 +198,8 @@ function CreateAnnonce() {
                   id="date_start"
                   label="Date de début"
                   inputProps={{ min: currentDate }}
+                  value={formData.date_start}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -108,6 +211,8 @@ function CreateAnnonce() {
                   id="date_end"
                   label="Date de fin"
                   inputProps={{ min: currentDate }}
+                  value={formData.date_end}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -117,6 +222,8 @@ function CreateAnnonce() {
                   fullWidth
                   type="text"
                   label="Salaire"
+                  value={formData.salary}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -128,6 +235,8 @@ function CreateAnnonce() {
                   rows={10}
                   fullWidth
                   required
+                  value={formData.description_job}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -136,11 +245,11 @@ function CreateAnnonce() {
                     Etablissement
                   </InputLabel>
                   <Select
-                    padd
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={selectedLocation}
                     label="Etablissement"
+                    name="location_id"
                     onChange={handleChange}
                     required
                   >
@@ -163,6 +272,20 @@ function CreateAnnonce() {
             >
               Valider
             </Button>
+            {showSuccess && (
+              <Alert severity="success" onClose={() => setShowSuccess(false)}>
+                Votre offre d'emploi a été créer, redirection vers l'accueil
+              </Alert>
+            )}
+            {showError && (
+              <Alert severity="error" onClose={() => setShowError(false)}>
+                {formData.salary.trim() === ""
+                  ? "Veuillez remplir tous les champs."
+                  : isNaN(formData.salary)
+                  ? "Le champ du salaire doit contenir uniquement des chiffres."
+                  : "La date de fin ne peut pas être antérieure à la date de début."}
+              </Alert>
+            )}
           </Box>
         </Box>
       </Container>
