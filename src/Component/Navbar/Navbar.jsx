@@ -47,6 +47,10 @@ function NavBar() {
     navigate("/create-annonce");
   };
 
+  const navigateToMyAnnonce = () => {
+    navigate("/my-annonce");
+  };
+
   const navigateToAppCompany = () => {
     navigate("/application-company");
   };
@@ -184,6 +188,14 @@ function NavBar() {
                 sx={{ my: 2, color: "white", display: "block" }}
               >
                 Créer une annonce
+              </Button>
+            )}
+            {auth && isCompany === "true" && (
+              <Button
+                onClick={navigateToMyAnnonce}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                Mes annonces
               </Button>
             )}
             {auth && (

@@ -5,6 +5,7 @@ import Login from "./Component/Login/Login";
 import ProfilUser from "./Component/ProfilUser/ProfilUser";
 import ProfilCompany from "./Component/ProfilCompany/ProfilCompany";
 import CreateAnnonce from "./Component/CreateAnnonce/CreateAnnonce";
+import MyAnnonce from "./Component/MyAnnonce/MyAnnonce";
 import ApplicationCompany from "./Component/ApplicationCompany/ApplicationCompany";
 import ApplicationUser from "./Component/ApplicationUser/ApplicationUser";
 import RegisterUser from "./Component/RegisterUser/RegisterUser";
@@ -40,6 +41,10 @@ function App() {
     {
       path: "/create-annonce",
       element: <CreateAnnonce />,
+    },
+    {
+      path: "/my-annonce",
+      element: <MyAnnonce />,
     },
     {
       path: "/application-company",

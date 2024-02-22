@@ -7,7 +7,8 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import "./PostedAnnonce.css";
+import "./MyAnnonce.css";
+import NavBar from "../Navbar/Navbar";
 
 const style = {
   position: "absolute",
@@ -23,22 +24,30 @@ const style = {
   p: 4,
 };
 
-const PostedAnnonce = () => {
+const MyAnnonce = () => {
   const [jobs, setJobs] = useState([]);
   const [openModalId, setOpenModalId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/jobs");
-        const sortedJobs = response.data.jobs.sort(
-          (a, b) => Date.parse(b.date_start) - Date.parse(a.date_start)
-        );
-        setJobs(sortedJobs);
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:8000/api/jobs", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          setJobs(response.data.jobs);
+        } else {
+          console.error("Error fetching jobs data");
+        }
       } catch (error) {
-        console.error("Erreur lors de la récupération des données :", error);
+        console.error("Error fetching jobs data", error);
       }
     };
+
     fetchData();
   }, []);
 
@@ -52,6 +61,7 @@ const PostedAnnonce = () => {
 
   return (
     <div className="annonce-container">
+      <NavBar />
       {jobs.map((job) => (
         <Card key={job.id} sx={{ minWidth: 275 }}>
           <CardContent>
@@ -114,4 +124,4 @@ const PostedAnnonce = () => {
   );
 };
 
-export default PostedAnnonce;
+export default MyAnnonce;
