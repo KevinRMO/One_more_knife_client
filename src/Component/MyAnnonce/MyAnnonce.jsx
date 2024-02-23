@@ -28,11 +28,13 @@ const MyAnnonce = () => {
   const [jobs, setJobs] = useState([]);
   const [openModalId, setOpenModalId] = useState(null);
 
+  //////////////////////////////////////// Afficher les annonces de l'utilisateur connecter ////////////////////////////////////////
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8000/api/jobs", {
+        const response = await axios.get("http://localhost:8000/api/jobs{id}", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,6 +42,7 @@ const MyAnnonce = () => {
 
         if (response.status === 200) {
           setJobs(response.data.jobs);
+          console.log(jobs);
         } else {
           console.error("Error fetching jobs data");
         }
@@ -60,7 +63,7 @@ const MyAnnonce = () => {
   };
 
   return (
-    <div className="annonce-container">
+    <div className="annonce-container-deux">
       <NavBar />
       {jobs.map((job) => (
         <Card key={job.id} sx={{ minWidth: 275 }}>

@@ -1,0 +1,6 @@
+.annonce-container-deux {
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  margin: 11vh 4vh;
+}
