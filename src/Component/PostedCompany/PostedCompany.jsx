@@ -10,7 +10,6 @@ import TextField from "@mui/material/TextField";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
-
 import "./PostedCompany.css";
 
 const PostedCompany = () => {

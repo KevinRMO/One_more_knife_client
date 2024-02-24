@@ -4,3 +4,11 @@
   gap: 2vh;
   margin: 11vh 4vh;
 }
+
+.location {
+  text-decoration: underline;
+}
+
+.css-hordx {
+  margin-top: 0vh !important;
+}
