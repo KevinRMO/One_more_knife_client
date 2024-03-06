@@ -9,19 +9,34 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Document, Page } from "react-pdf";
 
 function ProfilUser() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({
+    user: {
+      lastname: "",
+      firstname: "",
+      birth_date: "",
+      zip_code: "",
+      city: "",
+      phone: "",
+      cv_path: "",
+      globale_rate_user: "",
+      email: "",
+    },
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/profil", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:8000/api/profil-user",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user profile data:", error);
@@ -35,23 +50,24 @@ function ProfilUser() {
       <NavBar />
       <Card sx={{ maxWidth: 600 }}>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            Lizard
+          <Typography gutterBottom variant="h4" component="div">
+            {userData.user.lastname} {userData.user.firstname}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
+          <Typography variant="h6">
+            <span>Date de naissance:</span> {userData.user.birth_date}
           </Typography>
+          <Typography variant="h6">
+            Ville et code postal: {userData.user.city} {userData.user.zip_code}
+          </Typography>
+          <Typography variant="h6">Téléphone: {userData.user.phone}</Typography>
+          <Typography variant="h6">Mail: {userData.user.email}</Typography>
         </CardContent>
         <CardActions>
           <Button size="small">Share</Button>
           <Button size="small">Learn More</Button>
         </CardActions>
-        <CardMedia
-          sx={{ height: 140 }}
-          image="/static/images/cards/contemplative-reptile.jpg"
-          title="green iguana"
-        />
+        <CardMedia sx={{ height: 140 }} />
+        {userData.user.cv_path}
       </Card>
     </div>
   );
