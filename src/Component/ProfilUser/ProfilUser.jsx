@@ -7,11 +7,12 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { Document, Page } from "react-pdf";
+import EditProfilModal from "../EditProfilModal/EditProfilModal";
 
 function ProfilUser() {
+  const [openModal, setOpenModal] = useState(false);
   const [userData, setUserData] = useState({
     user: {
       lastname: "",
@@ -21,8 +22,6 @@ function ProfilUser() {
       city: "",
       phone: "",
       cv_path: "",
-      globale_rate_user: "",
-      email: "",
     },
   });
 
@@ -45,6 +44,44 @@ function ProfilUser() {
 
     fetchUserData();
   }, []);
+
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setUserData((prevState) => ({
+      ...prevState,
+      user: {
+        ...prevState.user,
+        [name]: value,
+      },
+    }));
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.put(
+        "http://localhost:8000/api/edit-profil-user",
+        userData.user,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      handleCloseModal();
+    } catch (error) {
+      console.error("Erreur lors de la modification du profil:", error);
+    }
+  };
+
   return (
     <div className="card">
       <NavBar />
@@ -63,12 +100,24 @@ function ProfilUser() {
           <Typography variant="h6">Mail: {userData.user.email}</Typography>
         </CardContent>
         <CardActions>
-          <Button size="small">Share</Button>
-          <Button size="small">Learn More</Button>
+          <Button
+            className="buttonModifier"
+            size="small"
+            onClick={handleOpenModal}
+          >
+            Modifier
+          </Button>
         </CardActions>
         <CardMedia sx={{ height: 140 }} />
         {userData.user.cv_path}
       </Card>
+      <EditProfilModal
+        open={openModal}
+        handleCloseModal={handleCloseModal}
+        userData={userData}
+        handleChange={handleChange}
+        handleFormSubmit={handleFormSubmit}
+      />
     </div>
   );
 }

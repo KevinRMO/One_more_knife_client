@@ -3,3 +3,16 @@
   justify-content: center;
   margin-top: 20vh;
 }
+
+/* Button modifier */
+#root
+  > div
+  > div
+  > div
+  > div.MuiCardActions-root.MuiCardActions-spacing.css-dnrpxu-MuiCardActions-root
+  > button {
+  background-color: #1a2530;
+  color: white;
+  height: 3vh;
+  width: 7vw;
+}
