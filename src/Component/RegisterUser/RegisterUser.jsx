@@ -83,14 +83,14 @@ function RegisterUser() {
     }
     setPasswordsMatch(true);
 
-    // Vérifier si le fichier CV est au format PDF
+    // Vérifier si le fichier CV est au format PDF, PNG ou JPEG
     const cvFile = event.currentTarget.querySelector("#cv_path");
     if (cvFile && cvFile.files.length > 0) {
-      const allowedExtensions = ["pdf"];
+      const allowedExtensions = ["pdf", "png", "jpeg", "jpg"];
       const fileName = cvFile.files[0].name;
       const fileExtension = fileName.split(".").pop().toLowerCase();
       if (!allowedExtensions.includes(fileExtension)) {
-        console.error("Le fichier CV doit être au format PDF");
+        console.error("Le fichier CV doit être au format PDF, PNG ou JPEG");
         setShowError(true); // Afficher le message d'erreur général
         setShowCVError(true); // Afficher le message d'erreur spécifique au CV
         setTimeout(() => {

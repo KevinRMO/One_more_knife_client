@@ -37,6 +37,7 @@ function ProfilUser() {
           }
         );
         setUserData(response.data);
+        console.log(userData);
       } catch (error) {
         console.error("Error fetching user profile data:", error);
       }
@@ -108,8 +109,15 @@ function ProfilUser() {
             Modifier
           </Button>
         </CardActions>
-        <CardMedia sx={{ height: 140 }} />
-        {userData.user.cv_path}
+        {/* Affichage du CV */}
+        {userData.user.cv_path && (
+          <CardMedia
+            component="img"
+            alt="CV"
+            height="140"
+            image={`http://localhost:8000/${userData.user.cv_path}`}
+          />
+        )}
       </Card>
       <EditProfilModal
         open={openModal}

@@ -139,16 +139,14 @@ const EditProfilModal = ({
                     id="cv_path"
                     name="cv_path"
                     accept=".pdf"
-                    onChange={(event) => {
-                      const file = event.target.files[0];
-                      setUserData((prevState) => ({
-                        ...prevState,
-                        user: {
-                          ...prevState.user,
-                          cv_path: file,
+                    onChange={(event) =>
+                      handleChange({
+                        target: {
+                          name: "cv_path",
+                          value: event.target.files[0],
                         },
-                      }));
-                    }}
+                      })
+                    }
                   />
                 </Grid>
               </Grid>
